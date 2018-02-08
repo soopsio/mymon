@@ -1,17 +1,3 @@
-// Copyright 2017 Xiaomi, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package main
 
 import (
@@ -248,9 +234,13 @@ var DataType = map[string]string{
 }
 
 type MysqlIns struct {
-	Host string
-	Port int
-	Tag  string
+	User   string
+	Pass   string
+	Host   string
+	Port   int
+	Socket string
+	Flag   string
+	Tag    string
 }
 
 func dataType(key_ string) string {
@@ -276,12 +266,13 @@ func (m *MetaData) String() string {
 	return s
 }
 
-func NewMetric(name string) *MetaData {
+// name 以 CustomData_ 开始表示非标准监控数据
+func NewMetric(name string, m *MysqlIns) *MetaData {
 	return &MetaData{
 		Metric:      name,
 		Endpoint:    hostname(),
 		CounterType: dataType(name),
-		Tags:        fmt.Sprintf("port=%d", cfg.Port),
+		Tags:        fmt.Sprintf("port=%d", m.Port),
 		Timestamp:   time.Now().Unix(),
 		Step:        60,
 	}
@@ -294,7 +285,8 @@ func hostname() string {
 	}
 	host, err := os.Hostname()
 	if err != nil {
-		host = cfg.Host
+		// host = cfg.Host
+		host = localip.String()
 	}
 	return host
 }

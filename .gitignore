@@ -1,3 +1,5 @@
 *.swp
 mymon
 *.log
+t/
+.vscode/

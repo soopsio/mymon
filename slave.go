@@ -1,17 +1,3 @@
-// Copyright 2017 Xiaomi, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package main
 
 import (
@@ -30,7 +16,7 @@ var SlaveStatusToSend = []string{
 
 func slaveStatus(m *MysqlIns, db mysql.Conn) ([]*MetaData, error) {
 
-	isSlave := NewMetric("Is_slave")
+	isSlave := NewMetric("Is_slave", m)
 
 	row, res, err := db.QueryFirst("SHOW SLAVE STATUS")
 	if err != nil {
@@ -48,7 +34,7 @@ func slaveStatus(m *MysqlIns, db mysql.Conn) ([]*MetaData, error) {
 
 	data := make([]*MetaData, len(SlaveStatusToSend))
 	for i, s := range SlaveStatusToSend {
-		data[i] = NewMetric(s)
+		data[i] = NewMetric(s, m)
 		switch s {
 		case "Slave_SQL_Running", "Slave_IO_Running":
 			data[i].SetValue(0)

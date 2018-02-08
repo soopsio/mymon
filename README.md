@@ -37,11 +37,26 @@ echo '* * * * * cd $GOPATH/src/github.com/open-falcon/mymon && ./mymon -c etc/mo
     #自定义endpoint
     endpoint=127.0.0.1 #若不设置则使用OS的hostname
 
-    [mysql]
+    #自动扫描多实例
+    mycnf = /usr/local/mysql/my.cnf
+
+    [mysqld]
     user=root # 数据库用户名
     password= # 数据库密码
     host=127.0.0.1 # 数据库连接地址
     port=3306 # 数据库端口
+
+    #[mysqld3060]
+    #user=root
+    #password=123456
+    #host=127.0.0.1
+    #port=3060
+
+    # 往kafka发送 show processlist 消息
+    # {"server":"127.0.0.1:3060","processlist":[{"COMMAND":"Sleep","DB":"test","HOST":"10.10.10.10:51811","ID":"68893","INFO":"","STATE":"","TIME":"1","USER":"root"}]}
+    [kafka]
+    brokers = 10.10.10.10:9092
+    topic=test
 ```
 
 ## MySQL metrics

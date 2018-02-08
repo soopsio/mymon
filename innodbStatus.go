@@ -1,17 +1,3 @@
-// Copyright 2017 Xiaomi, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package main
 
 import (
@@ -74,17 +60,17 @@ func parseInnodbStatus(m *MysqlIns, rows []string) ([]*MetaData, error) {
 			matches := regexp.MustCompile(`^Mutex spin waits\s+(\d+),\s+rounds\s+(\d+),\s+OS waits\s+(\d+)`).FindStringSubmatch(row)
 			if len(matches) == 4 {
 				spin_waits, _ := strconv.Atoi(matches[1])
-				Innodb_mutex_spin_waits := NewMetric("Innodb_mutex_spin_waits")
+				Innodb_mutex_spin_waits := NewMetric("Innodb_mutex_spin_waits", m)
 				Innodb_mutex_spin_waits.SetValue(spin_waits)
 				data = append(data, Innodb_mutex_spin_waits)
 
 				spin_rounds, _ := strconv.Atoi(matches[2])
-				Innodb_mutex_spin_rounds := NewMetric("Innodb_mutex_spin_rounds")
+				Innodb_mutex_spin_rounds := NewMetric("Innodb_mutex_spin_rounds", m)
 				Innodb_mutex_spin_rounds.SetValue(spin_rounds)
 				data = append(data, Innodb_mutex_spin_rounds)
 
 				os_waits, _ := strconv.Atoi(matches[3])
-				Innodb_mutex_os_waits := NewMetric("Innodb_mutex_os_waits")
+				Innodb_mutex_os_waits := NewMetric("Innodb_mutex_os_waits", m)
 				Innodb_mutex_os_waits.SetValue(os_waits)
 				data = append(data, Innodb_mutex_os_waits)
 			}
